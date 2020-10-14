@@ -30,6 +30,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     var key = inputs.key + sails.config.custom.prefix;
+    var client = await sails.helpers.redisClient();
     var value = inputs.value;
     client.set(key, value, function(err, ret) {
       if (err) sails.log.error(err);

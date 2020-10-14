@@ -20,6 +20,10 @@ module.exports.custom = {
   // stripeSecret: 'sk_test_Zzd814nldl91104qor5911gjald',
   // …
   server: 'wss://s1.callchain.live:5020',
-  prefix: 'call-data'
+  prefix: 'call-data',
+  limit: 10,
+  blks_key: 'latest-blocks',
+  txs_key: 'latest-transactions',
+  price_key: 'latest-price',
 
 };
