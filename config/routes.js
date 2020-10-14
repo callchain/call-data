@@ -22,7 +22,7 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-
+  'GET /': 'DataController.index',
   'GET /blocks/latest': 'DataController.latestBlocks',
   'GET /transactions/latest': 'DataController.latestTransactions',
   'GET /price/latest/:pair': 'DataController.latestPrice'
