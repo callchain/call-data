@@ -24,7 +24,7 @@ module.exports = {
         var pair = req.params.pair;
         var key = sails.config.custom.price_key + pair;
         var price = await sails.helpers.redisGet(key);
-        price = price ? JSON.parse([price]) : {price: '0', amount: '0', change: '0', time: new Date()};
+        price = price ? JSON.parse([price]) : {o: '0', h: '0', l: '0', c: '0', v: '0', time: new Date()};
         return res.json({success: true, data: price});
     }
 
