@@ -1,17 +1,21 @@
 {
   "name": "call-data",
-  "private": true,
-  "version": "0.0.0",
+  "private": false,
+  "version": "1.0.0",
   "description": "a Sails application",
   "keywords": [],
   "dependencies": {
+    "sails": "^1.0.2",
+    "grunt": "1.0.1",
+    "sails-hook-grunt": "^3.0.2",
+    "sails-hook-orm": "^2.0.0-16",
+    "sails-hook-sockets": "^1.4.0",
+    "@sailshq/connect-redis": "^3.2.1",
+    "@sailshq/socket.io-redis": "^5.2.0",
     "@sailshq/lodash": "^3.10.3",
     "async": "2.0.1",
     "call-lib": "^0.2.14",
-    "redis": "^3.0.2",
-    "sails": "^1.0.2",
-    "sails-hook-orm": "^2.0.0-16",
-    "sails-hook-sockets": "^1.4.0"
+    "redis": "^3.0.2"
   },
   "devDependencies": {
     "@sailshq/eslint": "^4.19.3"
@@ -25,9 +29,9 @@
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/lando/call-data.git"
+    "url": "git://github.com/callchain/call-data.git"
   },
-  "author": "lando",
+  "author": "callchain",
   "license": "",
   "engines": {
     "node": ">=14.4"

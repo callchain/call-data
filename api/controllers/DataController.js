@@ -6,9 +6,6 @@
  */
 
 module.exports = {
-    index: function(req, res) {
-        return res.ok('Welcome to Callchain. Please refer to github.com/callchain/calldata for more information.');
-    },
     latestBlocks: async function(req, res) {
         var key = sails.config.custom.blks_key;
         var blocks = await sails.helpers.redisGet(key);
