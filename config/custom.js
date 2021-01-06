@@ -59,11 +59,12 @@ module.exports.custom = {
       'minmov2': 0,
       'pointvalue': 1,
       'session': '24x7',
-      'has_intraday': false,
+      'has_intraday': true,
       'has_no_volume': false,
       'description': 'CALL/CNY',
       'type': 'bitcoin',
       'supported_resolutions': ['1', '5', '15', '30', '60', '1D', '1W', '1M'],
+      'intraday_multipliers': ['1', '1D'],
       'pricescale': 100
     }
   }
