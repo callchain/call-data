@@ -27,6 +27,9 @@ module.exports.routes = {
   },
   'GET /blocks/latest': 'DataController.latestBlocks',
   'GET /transactions/latest': 'DataController.latestTransactions',
-  'GET /price/latest/:pair': 'DataController.latestPrice'
+  'GET /price/latest/:pair': 'DataController.latestPrice',
 
+  'GET /tv/config': 'FeedController.config',
+  'GET /tv/symbols': 'FeedController.symbols',
+  'GET /tv/history': 'FeedController.history'
 };

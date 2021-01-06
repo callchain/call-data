@@ -12,36 +12,23 @@ module.exports = {
    * `FeedController.config()`
    */
   config: async function (req, res) {
-    return res.json({
-      todo: 'config() is not implemented yet!'
-    });
-  },
-
-  /**
-   * `FeedController.time()`
-   */
-  time: async function (req, res) {
-    return res.json({
-      todo: 'time() is not implemented yet!'
-    });
+    return res.json(sails.config.custom.tvconfig);
   },
 
   /**
    * `FeedController.symbols()`
    */
   symbols: async function (req, res) {
-    return res.json({
-      todo: 'symbols() is not implemented yet!'
-    });
+    var symbol = req.query.symbol;
+    return res.json(sails.config.custom.symbol_info[symbol]);
   },
 
   /**
    * `FeedController.history()`
    */
   history: async function (req, res) {
-    return res.json({
-      todo: 'history() is not implemented yet!'
-    });
+    const no_data = {s: 'no_data'};
+    return res.json(no_data);
   }
 
 };

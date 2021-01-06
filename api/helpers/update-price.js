@@ -61,6 +61,9 @@ module.exports = {
 
     await sails.helpers.redisSet(key, JSON.stringify(obj));
 
+    // TODO update kline
+    
+
     // All done.
     return exits.success();
 
