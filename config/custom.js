@@ -19,7 +19,7 @@ module.exports.custom = {
   // mailgunSecret: 'key-testkeyb183848139913858e8abd9a3',
   // stripeSecret: 'sk_test_Zzd814nldl91104qor5911gjald',
   // …
-  server: 'wss://s1.callchain.live:5020',
+  server: 'ws://s2.callchain.cc:5020',
   prefix: 'call-data',
   limit: 10,
   blks_key: 'latest-blocks',
