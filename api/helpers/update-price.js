@@ -37,6 +37,8 @@ module.exports = {
     var amount = inputs.amount;
 
     const symbol_info = sails.config.custom.symbol_info[pair];
+    if (!symbol_info) return;
+
     var multipliers = symbol_info.intraday_multipliers;
     for (var i = 0; i < multipliers.length; ++i)
     {
@@ -44,7 +46,7 @@ module.exports = {
       var now = Math.floor(Date.now() / 1000);
       var t = await sails.helpers.toKlineTime(m, now);
 
-      var key = ails.config.custom.price_key + '-' + pair + '-' + m + '-' + t;
+      var key = sails.config.custom.price_key + '-' + pair + '-' + m + '-' + t;
       var obj = await sails.helpers.redisGet(key);
 
       obj = obj ? JSON.parse(obj) : {o: price, h: price, l: price, c: price, v: 0, t: t, u: 0};

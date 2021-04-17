@@ -49,9 +49,9 @@ module.exports.custom = {
   },
 
   symbol_info: {
-    'CALL/CNY@c9GEywsWXZroNPmMgP1k4xjr7VRF6Gp4R7': {
-      'name': 'CALL/CNY@c9GEywsWXZroNPmMgP1k4xjr7VRF6Gp4R7',
-      'ticker': 'CALL/CNY@c9GEywsWXZroNPmMgP1k4xjr7VRF6Gp4R7',
+    'CALL_CNY@c9GEywsWXZroNPmMgP1k4xjr7VRF6Gp4R7': {
+      'name': 'CALL_CNY@c9GEywsWXZroNPmMgP1k4xjr7VRF6Gp4R7',
+      'ticker': 'CALL_CNY@c9GEywsWXZroNPmMgP1k4xjr7VRF6Gp4R7',
       'exchange-traded': 'CallWallet',
       'exchange-listed"': 'CallWallet',
       'timezone': 'Asia/Singapore',
@@ -61,7 +61,7 @@ module.exports.custom = {
       'session': '24x7',
       'has_intraday': true,
       'has_no_volume': false,
-      'description': 'CALL/CNY@c9GEywsWXZroNPmMgP1k4xjr7VRF6Gp4R7',
+      'description': 'CALL_CNY@c9GEywsWXZroNPmMgP1k4xjr7VRF6Gp4R7',
       'type': 'bitcoin',
       'supported_resolutions': ['1', '5', '15', '30', '60', '1D', '1W', '1M'],
       'intraday_multipliers': ['1', '1D'],

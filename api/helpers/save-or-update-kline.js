@@ -43,7 +43,9 @@ module.exports = {
       var t = inputs.t;
       var obj = inputs.obj;
 
+      console.dir(sails.models.kline);
       var kline = await Kline.findOne({s: s, r: r, t: t});
+      console.dir(kline);
       if (kline)
       {
         await Kline.update({s: s, r: r, t: t}).set({o: obj.o, h: obj.h, l: obj.l, c: obj.c, v: obj.v, u: obj.u})

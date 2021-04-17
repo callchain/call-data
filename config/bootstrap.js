@@ -71,6 +71,7 @@ module.exports.bootstrap = async function(done) {
               }
               var price = getPrice(change);
               var amount = getAmount(change);
+              console.log('NEW PRICE, pair=' + pair + ", price=" + price + ", amount=" + amount);
               await sails.helpers.updatePrice(pair, price, amount);
             }
           }
