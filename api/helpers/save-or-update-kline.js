@@ -1,11 +1,5 @@
-const Kline = require("../models/Kline");
-
 module.exports = {
-
-
     friendlyName: 'Save Or Update Kline',
-  
-  
     description: '',
   
     inputs: {
@@ -31,28 +25,27 @@ module.exports = {
       }
     },
   
-  
     exits: {
   
     },
-  
-  
-    fn: async function (inputs, exits) {
-      var s = inputs.pair;
-      var r = inputs.m;
-      var t = inputs.t;
-      var obj = inputs.obj;
 
-      console.dir(sails.models.kline);
-      var kline = await Kline.findOne({s: s, r: r, t: t});
-      console.dir(kline);
-      if (kline)
+    fn: async function (inputs, exits) {
+      let s = inputs.pair;
+      let r = inputs.m;
+      let t = inputs.t;
+      let obj = inputs.obj;
+
+      let kline = await Kline.find({s: s, r: r, t: t});
+      if (kline.length >= 1)
       {
-        await Kline.update({s: s, r: r, t: t}).set({o: obj.o, h: obj.h, l: obj.l, c: obj.c, v: obj.v, u: obj.u})
+        await Kline.update({s: s, r: r, t: t}).set(obj)
       }
       else
       {
-        await Kline.create({s: s, r: r, t: t, o: obj.o, h: obj.h, l: obj.l, c: obj.c, v: obj.v, u: obj.u});
+        obj.s = s;
+        obj.r = r;
+        obj.t = t;
+        await Kline.create(obj);
       }
       
       // All done.

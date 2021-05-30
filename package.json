@@ -9,6 +9,7 @@
     "@sailshq/lodash": "^3.10.3",
     "@sailshq/socket.io-redis": "^5.2.0",
     "async": "2.0.1",
+    "bignumber.js": "^9.0.1",
     "call-lib": "^0.2.14",
     "grunt": "1.0.1",
     "redis": "^3.0.2",

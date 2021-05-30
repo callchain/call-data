@@ -1,3 +1,6 @@
+const BN = require('bignumber.js');
+const ZERO = new BN(0);
+
 module.exports = {
 
 
@@ -14,12 +17,12 @@ module.exports = {
       required: true
     },
     price: {
-      type: 'string',
+      type: 'ref',
       description: 'trade price',
       required: true
     },
     amount: {
-      type: 'string',
+      type: 'ref',
       description: 'trade amount',
       required: true
     }
@@ -32,30 +35,33 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    var pair = inputs.pair;
-    var price = inputs.price;
-    var amount = inputs.amount;
+    let pair = inputs.pair;
+    let price = inputs.price;
+    let amount = inputs.amount;
 
     const symbol_info = sails.config.custom.symbol_info[pair];
     if (!symbol_info) return;
 
-    var multipliers = symbol_info.intraday_multipliers;
-    for (var i = 0; i < multipliers.length; ++i)
+    let multipliers = symbol_info.intraday_multipliers;
+    for (let i = 0; i < multipliers.length; ++i)
     {
-      var m = multipliers[i];      
-      var now = Math.floor(Date.now() / 1000);
-      var t = await sails.helpers.toKlineTime(m, now);
+      let m = multipliers[i];
+      let now = parseInt(Date.now() / 1000);
+      let t = await sails.helpers.toKlineTime(m, now);
 
-      var key = sails.config.custom.price_key + '-' + pair + '-' + m + '-' + t;
-      var obj = await sails.helpers.redisGet(key);
+      let key = sails.config.custom.price_key + '-' + pair + '-' + m + '-' + t;
+      let obj = await sails.helpers.redisGet(key);
 
-      obj = obj ? JSON.parse(obj) : {o: price, h: price, l: price, c: price, v: 0, t: t, u: 0};
-      obj.v = (Number(obj.v) + Number(amount)).toFixed(6);
-      obj.u = (Number(obj.u) + Number(amount) * Number(price)).toFixed(6);
-      obj.h = Number(price) > Number(obj.h) ? price : obj.h;
-      obj.l = Number(price) < Number(obj.l) ? price : obj.l;
-      obj.c = price;
+      let pn = price.toFixed(6);
+      obj = obj ? JSON.parse(obj) : {o: pn, h: pn, l: pn, c: pn, v: '0', t: t, u: '0'};
+
+      obj.v = amount.plus(obj.v).toFixed(6);
+      obj.u = amount.times(price).plus(obj.u).toFixed(6);
+      obj.h = price.isGreaterThan(obj.h) ? price.toFixed(6) : obj.h;
+      obj.l = price.isLessThan(obj.l) ? price.toFixed(6) : obj.l;
+      obj.c = price.toFixed(6);
       obj.t = t;
+
       // update cache
       await sails.helpers.redisSet(key, JSON.stringify(obj));
       // update kline db
@@ -66,7 +72,6 @@ module.exports = {
     return exits.success();
 
   }
-
 
 };
 

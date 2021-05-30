@@ -22,11 +22,11 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    var tx = inputs.tx;
-    var key = sails.config.custom.txs_key;
-    var txs = await sails.helpers.redisGet(key);
+    let tx = inputs.tx;
+    let key = sails.config.custom.txs_key;
+    let txs = await sails.helpers.redisGet(key);
     txs = txs ? JSON.parse(txs) : [];
-    var limit = sails.config.custom.limit;
+    let limit = sails.config.custom.limit;
     if (txs.length >= limit) {
       txs.pop();
     }
