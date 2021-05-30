@@ -9,23 +9,14 @@
  * https://sailsjs.com/config/bootstrap
  */
 const call = require('call-lib');
-
-function getPrice(item, type) {
-  var ret = Number(item.totalPrice.value) / Number(item.quantity.value);
-  if (type === 'buy') return (Math.floor(ret * 1000000) / 1000000).toFixed(6);
-  else return (Math.ceil(ret * 1000000) / 1000000).toFixed(6);
-}
-
-function getAmount(item) {
-  return (Math.ceil(Number(item.quantity.value) * 1000000) / 1000000).toFixed(6);
-}
+const BN = require('bignumber.js');
 
 module.exports.bootstrap = async function(done) {
 
   // Don't forget to trigger `done()` when this bootstrap function's logic is finished.
   // (otherwise your server will never lift, since it's waiting on the bootstrap)
 
-  var api = new call.CallAPI({
+  let api = new call.CallAPI({
     server: sails.config.custom.server
   });
 
@@ -47,20 +38,20 @@ module.exports.bootstrap = async function(done) {
   });
 
   api.on('transactions', async function(tx) {
-      var hash = tx.transaction.hash;
+      let hash = tx.transaction.hash;
       try {
-          var info = await api.getTransaction(hash);
+          let info = await api.getTransaction(hash);
           await sails.helpers.updateLatestTransactions(info);
 
           // update order pair price
-          var orderbookChanges = info.outcome.orderbookChanges;
-          for (var prop in orderbookChanges) {
-            var changes = orderbookChanges[prop];
-            for (var i = 0; i < changes.length; ++i)
+          let orderbookChanges = info.outcome.orderbookChanges;
+          for (let prop in orderbookChanges) {
+            let changes = orderbookChanges[prop];
+            for (let i = 0; i < changes.length; ++i)
             {
-              var change = changes[i];
+              let change = changes[i];
               if (change.status !== 'filled' && change.status !== 'partially-filled') continue;
-              var pair = change.quantity.currency;
+              let pair = change.quantity.currency;
               if (change.quantity.counterparty) {
                 pair += '@' + change.quantity.counterparty;
               }
@@ -69,8 +60,11 @@ module.exports.bootstrap = async function(done) {
               if (change.totalPrice.counterparty) {
                 pair += '@' + change.totalPrice.counterparty;
               }
-              var price = getPrice(change);
-              var amount = getAmount(change);
+
+              let price = new BN(change.totalPrice.value).div(change.quantity.value);
+              let amount = new BN(change.quantity.value);
+
+              console.log('NEW PRICE, pair=' + pair + ", price=" + price + ", amount=" + amount);
               await sails.helpers.updatePrice(pair, price, amount);
             }
           }

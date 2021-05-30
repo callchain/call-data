@@ -2,4 +2,8 @@ node_modules/
 config/*_example.js
 *.log
 .tmp
+<<<<<<< HEAD
 .www
+=======
+calldata.db
+>>>>>>> origin/develop

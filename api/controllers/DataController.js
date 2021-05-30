@@ -6,29 +6,38 @@
  */
 
 module.exports = {
-    index: function(req, res) {
-        return res.ok('Welcome to Callchain. Please refer to github.com/callchain/calldata for more information.');
-    },
     latestBlocks: async function(req, res) {
-        var key = sails.config.custom.blks_key;
-        var blocks = await sails.helpers.redisGet(key);
+        let key = sails.config.custom.blks_key;
+        let blocks = await sails.helpers.redisGet(key);
         blocks = blocks ? blocks : '[]';
         return res.json({success: true, data: JSON.parse(blocks)});
     },
 
     latestTransactions: async function(req, res) {
-        var key = sails.config.custom.txs_key;
-        var txs = await sails.helpers.redisGet(key);
+        let key = sails.config.custom.txs_key;
+        let txs = await sails.helpers.redisGet(key);
         txs = txs ? txs : '[]';
         return res.json({success: true, data: JSON.parse(txs)});
     },
 
     latestPrice: async function(req, res) {
-        var pair = req.params.pair;
-        var key = sails.config.custom.price_key + pair;
-        var price = await sails.helpers.redisGet(key);
-        price = price ? JSON.parse([price]) : {o: '0', h: '0', l: '0', c: '0', v: '0', time: new Date()};
-        return res.json({success: true, data: price});
+        let pair = req.params.pair;
+        let now = parseInt(Date.now() / 1000);
+        let t = parseInt(now / 86400) * 86400;
+        let key = sails.config.custom.price_key + '-' + pair + '-1D-' + t;
+        let price = await sails.helpers.redisGet(key);
+        if (price) {
+            return res.json({success: true, data: JSON.parse([price])});
+        }
+        let kline = await Kline.find({s: pair, r: '1D', t: t});
+        if (kline.length >= 1) {
+            let k = kline[0];
+            price = {o: k.o, h: k.h, l: k.l, c: k.c, v: k.v, u: k.u, time: now};
+            await sails.helpers.redisSet(key, JSON.stringify(price));
+            return res.json({success: true, data: price});
+        }
+
+        return res.json({success: true, data: {o: '0', h: '0', l: '0', c: '0', v: '0', u: '0', time: now}});
     }
 
 };

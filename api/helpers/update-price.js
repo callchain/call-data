@@ -1,3 +1,6 @@
+const BN = require('bignumber.js');
+const ZERO = new BN(0);
+
 module.exports = {
 
 
@@ -14,12 +17,12 @@ module.exports = {
       required: true
     },
     price: {
-      type: 'string',
+      type: 'ref',
       description: 'trade price',
       required: true
     },
     amount: {
-      type: 'string',
+      type: 'ref',
       description: 'trade amount',
       required: true
     }
@@ -32,40 +35,43 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    var pair = inputs.pair;
-    var price = inputs.price;
-    var amount = inputs.amount;
-    var key = sails.config.custom.price_key + pair;
-    var obj = await sails.helpers.redisGet(key);
-    var date = new Date();
-    obj = obj ? JSON.parse(obj) : {o: price, h: price, l: price, c: price, v: 0, t: date};
-    if ((typeof obj.t) === 'string') {
-      obj.t = new Date(obj.t);
-    }
-    // next day
-    if (obj.t.getDate() !== date.getDate())
-    {
-      obj.v = amount;
-      obj.o = price;
-      obj.h = price;
-      obj.l = price;
-    }
-    else
-    {
-      obj.v = (Number(obj.v) + Number(amount)).toFixed(6);
-      obj.h = Number(price) > Number(obj.h) ? price : obj.h;
-      obj.l = Number(price) < Number(obj.l) ? price : obj.l;
-    }
-    obj.c = price;
-    obj.t = date;
+    let pair = inputs.pair;
+    let price = inputs.price;
+    let amount = inputs.amount;
 
-    await sails.helpers.redisSet(key, JSON.stringify(obj));
+    const symbol_info = sails.config.custom.symbol_info[pair];
+    if (!symbol_info) return;
+
+    let multipliers = symbol_info.intraday_multipliers;
+    for (let i = 0; i < multipliers.length; ++i)
+    {
+      let m = multipliers[i];
+      let now = parseInt(Date.now() / 1000);
+      let t = await sails.helpers.toKlineTime(m, now);
+
+      let key = sails.config.custom.price_key + '-' + pair + '-' + m + '-' + t;
+      let obj = await sails.helpers.redisGet(key);
+
+      let pn = price.toFixed(6);
+      obj = obj ? JSON.parse(obj) : {o: pn, h: pn, l: pn, c: pn, v: '0', t: t, u: '0'};
+
+      obj.v = amount.plus(obj.v).toFixed(6);
+      obj.u = amount.times(price).plus(obj.u).toFixed(6);
+      obj.h = price.isGreaterThan(obj.h) ? price.toFixed(6) : obj.h;
+      obj.l = price.isLessThan(obj.l) ? price.toFixed(6) : obj.l;
+      obj.c = price.toFixed(6);
+      obj.t = t;
+
+      // update cache
+      await sails.helpers.redisSet(key, JSON.stringify(obj));
+      // update kline db
+      await sails.helpers.saveOrUpdateKline(pair, m, t, obj);
+    }
 
     // All done.
     return exits.success();
 
   }
-
 
 };
 
