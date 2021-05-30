@@ -8,7 +8,7 @@ a [Sails v1](https://sailsjs.com) application
 
 CallData is service for Callchain recent data. It is now used for CallWallet and CallExplorer. Anyone can deploy this project and provide api service for Callchain applications.
 
-Production CallData api url: [http://data.callcahin.live](http://data.callchain.cc)
+Production CallData api url: [https://data.callcahin.live](https://data.callchain.cc)
 
 ## Gettting started
 
