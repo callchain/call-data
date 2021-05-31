@@ -31,5 +31,7 @@ module.exports.routes = {
 
   'GET /tv/config': 'FeedController.config',
   'GET /tv/symbols': 'FeedController.symbols',
-  'GET /tv/history': 'FeedController.history'
+  'GET /tv/history': 'FeedController.history',
+
+  // 'GET /updateStat': 'DataController.updateStat'
 };

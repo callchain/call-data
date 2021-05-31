@@ -74,6 +74,7 @@ module.exports.bootstrap = async function(done) {
   });
 
   api.connect().then(function() {
+    sails.api = api;
     return done();
   });
 

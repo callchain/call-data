@@ -4,6 +4,7 @@
  * @description :: Server-side actions for handling incoming requests.
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
+const updateStat = require('../services/updateStat');
 
 module.exports = {
     latestBlocks: async function(req, res) {
@@ -38,6 +39,11 @@ module.exports = {
         }
 
         return res.json({success: true, data: {o: '0', h: '0', l: '0', c: '0', v: '0', u: '0', time: now}});
+    },
+
+    updateStat: async function(req, res) {
+        let b = await updateStat();
+        return res.json('ok to ' + b);
     }
 
 };
