@@ -1,6 +1,6 @@
 const updateBalance = require('./updateBalance');
 
-const MAX_LIMIT = 4500;
+const MAX_LIMIT = 3000;
 const MIN_LEDGER = 1;
 
 module.exports = async function() {
