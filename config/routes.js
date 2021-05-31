@@ -25,6 +25,7 @@ module.exports.routes = {
   '/': {
     view: 'pages/homepage'
   },
+
   'GET /blocks/latest': 'DataController.latestBlocks',
   'GET /transactions/latest': 'DataController.latestTransactions',
   'GET /price/latest/:pair': 'DataController.latestPrice',
@@ -33,5 +34,5 @@ module.exports.routes = {
   'GET /tv/symbols': 'FeedController.symbols',
   'GET /tv/history': 'FeedController.history',
 
-  // 'GET /updateStat': 'DataController.updateStat'
+  'GET /richest': 'DataController.richest'
 };

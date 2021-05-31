@@ -41,9 +41,18 @@ module.exports = {
         return res.json({success: true, data: {o: '0', h: '0', l: '0', c: '0', v: '0', u: '0', time: now}});
     },
 
-    updateStat: async function(req, res) {
-        let b = await updateStat();
-        return res.json('ok to ' + b);
+    richest: async function(req, res) {
+        let q = req.query;
+        let offset = q.offset ? (Number(q.offset) ? Number(q.offset) : 0) : 0;
+        let limit = q.limit ? (Number(q.limit) > 100 ? 100 : (Number(q.limit) ? Number(q.limit) : 100)) : 100;
+        
+        let accounts = await Account.find({
+            where: {a: {'!=': 'LATEST-BLOCK'}},
+            skip: limit * offset,
+            limit: limit,
+            sort: 'b DESC'
+        });
+        return res.json(accounts);
     }
 
 };
