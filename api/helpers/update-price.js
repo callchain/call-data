@@ -48,12 +48,14 @@ module.exports = {
       let m = multipliers[i];
       let now = parseInt(Date.now() / 1000);
       let t = await sails.helpers.toKlineTime(m, now);
+      let lk = await sails.helpers.lastKline(pair, m, t);
 
       let key = sails.config.custom.price_key + '-' + pair + '-' + m + '-' + t;
       let obj = await sails.helpers.redisGet(key);
 
       let pn = price.toFixed(6);
-      obj = obj ? JSON.parse(obj) : {o: pn, h: pn, l: pn, c: pn, v: '0', t: t, u: '0'};
+      // use last kline close price as open price for this kline
+      obj = obj ? JSON.parse(obj) : {o: lk.c !== 0 ? lk.c : pn, h: pn, l: pn, c: pn, v: '0', t: t, u: '0'};
 
       obj.v = amount.plus(obj.v).toFixed(6);
       obj.u = amount.times(price).plus(obj.u).toFixed(6);

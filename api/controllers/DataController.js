@@ -4,8 +4,6 @@
  * @description :: Server-side actions for handling incoming requests.
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
-const updateStat = require('../services/updateStat');
-
 module.exports = {
     latestBlocks: async function(req, res) {
         let key = sails.config.custom.blks_key;
@@ -45,7 +43,7 @@ module.exports = {
         let q = req.query;
         let offset = q.offset ? (Number(q.offset) ? Number(q.offset) : 0) : 0;
         let limit = q.limit ? (Number(q.limit) > 100 ? 100 : (Number(q.limit) ? Number(q.limit) : 100)) : 100;
-        
+
         let accounts = await Account.find({
             where: {a: {'!=': 'LATEST-BLOCK'}},
             skip: limit * offset,
